@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     database_url: str
     allowed_origins: list[str] = ["http://localhost:5173"]
+    allowed_origin_regex: str | None = None
     app_title: str = "Stock Watchlist API"
     debug: bool = False
 
