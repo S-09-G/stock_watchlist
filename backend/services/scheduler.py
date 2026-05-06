@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -14,6 +15,7 @@ _scheduler: BackgroundScheduler | None = None
 
 def refresh_all_prices() -> None:
     """Fetch fresh prices for every stock in every user's watchlist and update the DB."""
+    logger.info("Scheduler: starting refresh run")
     db = SessionLocal()
     try:
         items = db.query(WatchlistItem).all()
@@ -59,14 +61,17 @@ def start_scheduler() -> None:
         trigger="interval",
         minutes=settings.refresh_interval_minutes,
         id="refresh_all_prices",
-        max_instances=1,           # never overlap two runs
-        coalesce=True,             # if missed runs queued up, only run once
-        next_run_time=None,        # don't run at startup; first run is after the interval
+        max_instances=1,                               # never overlap two runs
+        coalesce=True,                                 # collapse missed runs into one
+        next_run_time=datetime.now(timezone.utc),     # fire once immediately, then every N min
     )
     _scheduler.start()
+
+    job = _scheduler.get_job("refresh_all_prices")
     logger.info(
-        "Scheduler started — refreshing prices every %d minute(s)",
+        "Scheduler started — refreshing every %d min, next run at %s UTC",
         settings.refresh_interval_minutes,
+        job.next_run_time.strftime("%H:%M:%S"),
     )
 
 
