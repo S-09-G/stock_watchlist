@@ -57,3 +57,8 @@ All routes are prefixed with `/api`.
 - Auto-polls the API every 60 seconds; re-fetches on tab focus
 - Toast notifications for all user actions
 
+
+<img width="1450" height="887" alt="Screenshot 2026-05-07 at 22 09 18" src="https://github.com/user-attachments/assets/ff928cce-d985-4713-a16f-56c28922e211" />
+<br>
+<img width="1458" height="883" alt="Screenshot 2026-05-07 at 22 09 37" src="https://github.com/user-attachments/assets/4666bb5a-1713-447d-939c-1e5a3aeb64df" />
+
